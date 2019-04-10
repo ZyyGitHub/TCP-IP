@@ -17,19 +17,34 @@ int main(int argc,char *argv[]) {
 	struct sockaddr_in server_addr;
 	char message[30];
 	int str_len;
+	int ret;
 
-	bzero(&server_addr, sizeof(server_addr));
+	if (argc != 3)
+	{
+		printf("usage :%s<IP><port>\n", argv[0]);
+		return -1;
+	}
+	sock = socket(AF_INET, SOCK_STREAM, 0);
+	//bzero(&server_addr, sizeof(server_addr));
+	memset(&server_addr, 0, sizeof(server_addr));
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_addr.s_addr = inet_addr(argv[1]);
 	server_addr.sin_port = htons(atoi(argv[2]));
 
-	if (connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr))) {
-		error_handing("connect() error");
+	ret = connect(sock, (struct sockaddr *)&server_addr, sizeof(server_addr));
+	printf("connect ret: %d\n", ret);
+	printf(" sock: %d\n", sock);
+	if (ret == -1)
+	{
+		printf("connect error\n");
+		return -1;
 	}
 	str_len = read(sock, message, sizeof(message));
+	printf("read str_len: %d\n", str_len);
 	if (str_len == -1)
 	{
-		error_handing("read() error");
+		printf("read error\n");
+		return -1;
 	}
 	printf("Message from server :%s \n",message);
 	close(sock);
