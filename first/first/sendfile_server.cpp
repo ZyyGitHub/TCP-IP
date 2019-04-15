@@ -5,14 +5,9 @@
 #include <arpa/inet.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-
-
-
-void error_handing(char *message) {
-	fputs(message, stderr);
-	fputc('\n', stderr);
-	exit(1);
-}
+#include <sys/stat.h>
+#include <sys/sendfile.h>
+#include <fcntl.h>
 
 int main(int argc, char * argv[]) {
 	int serv_sock;
@@ -21,16 +16,27 @@ int main(int argc, char * argv[]) {
 	struct sockaddr_in serv_addr;
 	struct sockaddr_in clnt_addr;
 	socklen_t clnt_addr_size;
-	char message[] = "hello world";
+	struct stat stat_buf;
 	int fd;
-	ret = write(fd, message, sizeof(message));
+	fd = open("data.txt", O_RDONLY);
+	printf("data fd : %d\n",fd);
 	if (fd == -1)
 	{
 		printf("open() error\n");
 		return -1;
 	}
+#if 0
+	char message[] = "hello world";
+	if (write(fd, message, sizeof(message)) == -1)
+	{
+		printf("write() error\n");
+		return -1;
+	}
+#endif
+	fstat(fd, &stat_buf);
+
 	if (argc != 2) {
-		printf("usage :%s<port>\n",argv[0]);
+		printf("usage :%s<port>\n", argv[0]);
 		return -1;
 	}
 	serv_sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -57,7 +63,7 @@ int main(int argc, char * argv[]) {
 	printf("bind OK");
 	ret = listen(serv_sock, 5);
 	printf("listen ret: %d\n", ret);
-	if (ret == -1) 
+	if (ret == -1)
 	{
 		printf("listen error");
 		return -1;
@@ -71,9 +77,11 @@ int main(int argc, char * argv[]) {
 		printf("accept error");
 		return -1;
 	}
-	printf("accept OK");
-	write(clnt_sock, message,sizeof(message));
-	close(clnt_sock);
+	else {
+		printf("accept OK\n");
+		sendfile(clnt_sock, fd, NULL, stat_buf.st_size);
+		close(clnt_sock);
+	}
 	close(serv_sock);
 	return 0;
 }

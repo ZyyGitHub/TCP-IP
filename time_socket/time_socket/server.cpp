@@ -30,7 +30,7 @@ int main(int argc, char * argv[]) {
 		return -1;
 	}
 	if (argc != 2) {
-		printf("usage :%s<port>\n",argv[0]);
+		printf("usage :%s<port>\n", argv[0]);
 		return -1;
 	}
 	serv_sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -57,7 +57,7 @@ int main(int argc, char * argv[]) {
 	printf("bind OK");
 	ret = listen(serv_sock, 5);
 	printf("listen ret: %d\n", ret);
-	if (ret == -1) 
+	if (ret == -1)
 	{
 		printf("listen error");
 		return -1;
@@ -72,7 +72,7 @@ int main(int argc, char * argv[]) {
 		return -1;
 	}
 	printf("accept OK");
-	write(clnt_sock, message,sizeof(message));
+	write(clnt_sock, message, sizeof(message));
 	close(clnt_sock);
 	close(serv_sock);
 	return 0;

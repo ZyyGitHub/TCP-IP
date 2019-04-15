@@ -35,9 +35,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6b766ffa-bae1-4a85-81c4-aa72b36cba88}</ProjectGuid>
+    <ProjectGuid>{32fe8b6b-ed89-4f55-98b3-881cd6e0e130}</ProjectGuid>
     <Keyword>Linux</Keyword>
-    <RootNamespace>first</RootNamespace>
+    <RootNamespace>select</RootNamespace>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -76,7 +76,6 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClCompile Include="client.cpp" />
-    <ClCompile Include="sendfile_server.cpp" />
     <ClCompile Include="server.cpp" />
   </ItemGroup>
   <ItemDefinitionGroup />
